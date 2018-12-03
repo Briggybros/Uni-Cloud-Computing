@@ -1,0 +1,26 @@
+{
+  "name": "signalling",
+  "version": "1.0.0",
+  "repository": "https://github.com/Briggybros/Uni-Cloud-Computing",
+  "author": "Gregory Sims, Ben Norris",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "npm run compile && node bin/server.js",
+    "compile": "babel src -d bin --extensions .ts --copy-files",
+    "clean": "rimraf bin",
+    "lint": "prettier --write 'src/**/*.ts' && tslint --project src",
+    "test": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-typescript": "^7.1.0",
+    "@types/socket.io": "^2.1.0",
+    "rimraf": "^2.6.2"
+  },
+  "dependencies": {
+    "socket.io": "^2.2.0"
+  }
+}
