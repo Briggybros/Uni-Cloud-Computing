@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "start": "npm run compile && node bin/server.js",
-    "compile": "babel src -d bin --extensions .ts --copy-files",
+    "compile": "babel src -d bin -x .ts -D",
     "clean": "rimraf bin",
     "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",
     "test": "tsc --noEmit"
