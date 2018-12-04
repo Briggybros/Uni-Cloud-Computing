@@ -9,7 +9,7 @@
     "start": "npm run compile && node bin/server.js",
     "compile": "babel src -d bin --extensions .ts --copy-files",
     "clean": "rimraf bin",
-    "lint": "prettier --write 'src/**/*.ts' && tslint --project src",
+    "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",
     "test": "tsc --noEmit"
   },
   "devDependencies": {
