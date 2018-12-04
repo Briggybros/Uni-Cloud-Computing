@@ -1,6 +1,20 @@
 import io from 'socket.io-client';
 
-type EventType = 'data';
+enum RTCError {
+  UNSUPPORTED_SDP = 'UNSUPPORTED_SDP',
+  NEGOTIATION_ERROR = 'NEGOTIATION_ERROR',
+  DATA_ERROR = 'DATA_ERROR',
+}
+const ERROR_MESSAGES = {
+  [RTCError.UNSUPPORTED_SDP]: 'unsupported SDP type',
+  [RTCError.NEGOTIATION_ERROR]: 'an error occurred in negotiation',
+};
+
+type EventType =
+  | 'error'
+  | 'data'
+  | 'connectionestablished'
+  | 'connectionterminated';
 
 interface Controller {
   send: (type: string, ...params: any[]) => void;
@@ -27,6 +41,10 @@ export function connect(signalling: string): Connection {
       listeners.event.forEach(listener => listener(...params));
     }
   }
+
+  socket.on('error', (error: string, message: string) =>
+    emitEvent('error', error, message)
+  );
 
   socket.emit('register-host', HOST_KEY);
 
@@ -60,11 +78,27 @@ export function connect(signalling: string): Connection {
         connection.localDescription
       );
     } catch (error) {
-      console.error(error);
+      emitEvent(
+        'error',
+        RTCError.NEGOTIATION_ERROR,
+        error.message || ERROR_MESSAGES[RTCError.NEGOTIATION_ERROR]
+      );
     }
+
+    dataChannel.addEventListener('error', (errorEvent: RTCErrorEvent) =>
+      emitEvent('error', RTCError.DATA_ERROR, errorEvent.error)
+    );
 
     dataChannel.addEventListener('message', messageEvent =>
       emitEvent('data', JSON.parse(messageEvent.data))
+    );
+
+    dataChannel.addEventListener('open', () =>
+      emitEvent('connectionestablished')
+    );
+
+    dataChannel.addEventListener('close', () =>
+      emitEvent('connectionterminated')
     );
   });
 
@@ -74,7 +108,11 @@ export function connect(signalling: string): Connection {
       if (description.type === 'answer') {
         connections[controllerId].connection.setRemoteDescription(description);
       } else {
-        console.error('unsupported SDP type');
+        emitEvent(
+          'error',
+          RTCError.UNSUPPORTED_SDP,
+          ERROR_MESSAGES[RTCError.UNSUPPORTED_SDP]
+        );
       }
     }
   );
