@@ -3,18 +3,11 @@ import io from 'socket.io-client';
 type EventType = 'data';
 
 interface Controller {
-  addEventListener: (
-    event: string,
-    callback: (...params: any[]) => any
-  ) => void;
   send: (type: string, ...params: any[]) => void;
 }
 
 interface Connection {
-  addEventListener: (
-    event: string,
-    callback: (...params: any[]) => any
-  ) => void;
+  addEventListener: (event: EventType, callback: Function) => void;
   getController: (controllerId: string) => Controller;
 }
 
@@ -27,8 +20,13 @@ let connections: {
 
 export function connect(signalling: string): Connection {
   const HOST_KEY = '';
-
   const socket = io(signalling);
+  let listeners: { [event: string]: Function[] } = {};
+  function emitEvent(event: string, ...params: any[]) {
+    if (listeners[event]) {
+      listeners.event.forEach(listener => listener(...params));
+    }
+  }
 
   socket.emit('register-host', HOST_KEY);
 
@@ -64,6 +62,10 @@ export function connect(signalling: string): Connection {
     } catch (error) {
       console.error(error);
     }
+
+    dataChannel.addEventListener('message', messageEvent =>
+      emitEvent('data', JSON.parse(messageEvent.data))
+    );
   });
 
   socket.on(
@@ -85,17 +87,24 @@ export function connect(signalling: string): Connection {
   );
 
   return {
-    addEventListener: (
-      event: string,
-      callback: (...params: any[]) => any
-    ) => {},
+    addEventListener: (event: EventType, listener: Function) => {
+      if (!listeners[event]) {
+        listeners = {
+          ...listeners,
+          [event]: [listener],
+        };
+      } else {
+        listeners = {
+          ...listeners,
+          [event]: [...listeners[event], listener],
+        };
+      }
+    },
     getController: (controllerId: string) => ({
-      addEventListener: (
-        event: string,
-        callback: (...params: any[]) => any
-      ) => {},
       send: (type: string, ...params: any[]) =>
-        connections[controllerId].dataChannel.send(JSON.stringify(params)),
+        connections[controllerId].dataChannel.send(
+          JSON.stringify({ type, ...params })
+        ),
     }),
   };
 }
