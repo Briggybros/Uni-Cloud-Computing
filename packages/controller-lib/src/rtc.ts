@@ -10,14 +10,14 @@ const ERROR_MESSAGES = {
   [RTCError.NEGOTIATION_ERROR]: 'an error occurred in negotiation',
 };
 
-type Event =
+type EventType =
   | 'error'
   | 'data'
   | 'connectionestablished'
   | 'connectionterminated';
 
 interface GameHost {
-  addEventListener: (event: Event, listener: Function) => void;
+  addEventListener: (event: EventType, listener: Function) => void;
   send: (type: string, ...params: any[]) => void;
 }
 
@@ -31,7 +31,7 @@ export function connect(signalling: string): GameHost {
   });
   const socket = io(signalling);
   let listeners: { [event: string]: Function[] } = {};
-  function emitEvent(event: Event, ...params: any[]) {
+  function emitEvent(event: EventType, ...params: any[]) {
     if (listeners[event]) {
       listeners.event.forEach(listener => listener(...params));
     }
@@ -99,7 +99,7 @@ export function connect(signalling: string): GameHost {
   );
 
   return {
-    addEventListener: (event: Event, listener: Function) => {
+    addEventListener: (event: EventType, listener: Function) => {
       if (!listeners[event]) {
         listeners = {
           ...listeners,
