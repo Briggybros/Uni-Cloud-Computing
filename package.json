@@ -1,7 +1,8 @@
 {
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "libs/*"
   ],
   "scripts": {
     "start": "lerna run start --stream",
