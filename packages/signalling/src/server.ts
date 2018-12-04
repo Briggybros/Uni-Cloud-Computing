@@ -23,10 +23,10 @@ io.on('connection', (socket: Socket) => {
       host = null;
     });
 
-    host.on('host-offer', (controllerId, offer) => {
+    host.on('host-description', (controllerId, description) => {
       const controller = io.sockets.connected[controllerId];
       if (!controller) return sendError(socket, Error.NO_CONTROLLER);
-      controller.emit('host-offer', offer);
+      controller.emit('host-description', description);
     });
 
     host.on('host-ice-candidate', (controllerId, icecandidate) => {
@@ -43,10 +43,10 @@ io.on('connection', (socket: Socket) => {
     host.emit('controller-connect', socket.id);
   });
 
-  socket.on('controller-offer', offer => {
+  socket.on('controller-description', description => {
     if (host === null) return sendError(socket, Error.NO_HOST);
     if (socket.id === host.id) return sendError(socket, Error.SELF_HOST);
-    host.emit('controller-offer', socket.id, offer);
+    host.emit('controller-description', socket.id, description);
   });
 
   socket.on('controller-ice-candidate', icecandidate => {
