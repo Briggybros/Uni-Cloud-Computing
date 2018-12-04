@@ -1,0 +1,9 @@
+{
+  "name": "host-lib",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Briggybros/Uni-Cloud-Computing",
+  "author": "Gregory Sims, Ben Norris",
+  "license": "MIT",
+  "private": true
+}
