@@ -16,7 +16,7 @@
     "compile:esm": "babel -x '.ts' ./src/**/* -d lib -D",
     "compile:types": "tsc --emitDeclarationOnly -p ./tsconfig.json --outDir ./lib",
     "clean": "rimraf dist lib",
-    "lint": "prettier --write 'src/**/*.ts' && tslint --project src",
+    "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",
     "test": "tsc --noEmit"
   },
   "devDependencies": {
