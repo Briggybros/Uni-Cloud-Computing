@@ -15,10 +15,10 @@ type Event =
   | 'data'
   | 'connectionestablished'
   | 'connectionterminated';
-type EventListener = (...params: any[]) => any;
 
 interface GameHost {
-  addEventListener: (event: Event, listener: EventListener) => void;
+  addEventListener: (event: Event, listener: Function) => void;
+  send: (type: string, ...params: any[]) => void;
 }
 
 export function connect(signalling: string): GameHost {
@@ -30,10 +30,11 @@ export function connect(signalling: string): GameHost {
     maxPacketLifeTime: 1000,
   });
   const socket = io(signalling);
-  let listeners: { [event: string]: EventListener[] } = {};
+  let listeners: { [event: string]: Function[] } = {};
   function emitEvent(event: Event, ...params: any[]) {
-    if (listeners[event])
+    if (listeners[event]) {
       listeners.event.forEach(listener => listener(...params));
+    }
   }
 
   socket.on('error', (error: string, message: string) =>
@@ -86,7 +87,7 @@ export function connect(signalling: string): GameHost {
   );
 
   dataChannel.addEventListener('message', messageEvent =>
-    emitEvent('data', messageEvent.data)
+    emitEvent('data', JSON.stringify(messageEvent.data))
   );
 
   dataChannel.addEventListener('open', () =>
@@ -98,7 +99,7 @@ export function connect(signalling: string): GameHost {
   );
 
   return {
-    addEventListener: (event: Event, listener: EventListener) => {
+    addEventListener: (event: Event, listener: Function) => {
       if (!listeners[event]) {
         listeners = {
           ...listeners,
@@ -110,6 +111,9 @@ export function connect(signalling: string): GameHost {
           [event]: [...listeners[event], listener],
         };
       }
+    },
+    send: (type: string, ...params: any[]) => {
+      dataChannel.send(JSON.stringify({ type, ...params }));
     },
   };
 }
