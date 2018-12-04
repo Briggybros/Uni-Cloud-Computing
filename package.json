@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "compile": "lerna run compile",
+    "clean": "lerna run clean",
+    "lint": "lerna run lint",
+    "test": "lerna run test",
+    "test-all": "npm run clean && npm run compile && npm run lint && npm run test",
+    "check-packages": "yarn clean && yarn compile && yarn test && yarn lint"
+  },
+  "devDependencies": {
+    "lerna": "^2.11.0"
+  }
+}
