@@ -1,6 +1,7 @@
 {
-  "name": "js-node-lib",
+  "name": "@timberwolf/js-host-lib",
   "version": "1.0.0",
+  "main": "lib/index.js",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": "https://github.com/Briggybros/Uni-Cloud-Computing",
@@ -15,7 +16,7 @@
     "compile": "run-p compile:*",
     "compile:esm": "babel -x '.ts' ./src/**/* -d lib -D",
     "compile:types": "tsc --emitDeclarationOnly -p ./tsconfig.json --outDir ./lib",
-    "clean": "rimraf lib",
+    "clean": "rimraf lib dist",
     "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",
     "test": "tsc --noEmit"
   },
@@ -30,7 +31,7 @@
     "rimraf": "^2.6.2"
   },
   "dependencies": {
-    "socket.io-client": "^2.2.0",
-    "wrtc": "^0.3.2"
+    "@babel/polyfill": "^7.0.0",
+    "socket.io-client": "^2.2.0"
   }
 }

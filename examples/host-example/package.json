@@ -1,0 +1,29 @@
+{
+  "name": "@timberwolf/host-example",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "repository": "https://github.com/Briggybros/Uni-Cloud-Computing",
+  "author": "Gregory Sims",
+  "license": "MIT",
+  "private": true,
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "start": "node lib/index.js",
+    "compile": "babel -x '.ts' ./src/**/* -d lib -D",
+    "clean": "rimraf lib",
+    "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",
+    "test": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/preset-typescript": "^7.1.0"
+  },
+  "dependencies": {
+    "@timberwolf/node-host-lib": "1.0.0"
+  }
+}

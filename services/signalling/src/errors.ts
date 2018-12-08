@@ -18,5 +18,5 @@ const messages: { [error: string]: string } = {
 };
 
 export function sendError(socket: Socket, error: Error) {
-  return socket.emit('error', error, messages[error]);
+  return socket.emit('signalling_error', error, messages[error]);
 }

@@ -1,20 +1,19 @@
 {
-  "name": "controller-example",
+  "name": "@timberwolf/controller-example",
   "version": "1.0.0",
-  "main": "server/dist/index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/Briggybros/Uni-Cloud-Computing",
   "author": "Gregory Sims",
   "license": "MIT",
   "private": true,
   "files": [
     "dist",
-    "lib",
     "src"
   ],
   "scripts": {
     "start": "ENV=development webpack-dev-server --open",
     "compile": "webpack",
-    "clean": "rimraf dist lib",
+    "clean": "rimraf dist",
     "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",
     "test": "tsc --noEmit"
   },
@@ -33,5 +32,8 @@
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10"
+  },
+  "dependencies": {
+    "@timberwolf/controller-lib": "1.0.0"
   }
 }

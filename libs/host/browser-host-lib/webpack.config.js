@@ -3,9 +3,9 @@ const path = require('path');
 module.exports = {
   entry: path.join(__dirname, 'src', 'index.ts'),
   output: {
-    filename: 'ucc-js-dom.min.js',
+    filename: 'timberwolf-browser-host-lib.min.js',
     path: path.join(__dirname, 'dist'),
-    library: 'UCCJSDOM',
+    library: 'TimberWolfHostLib',
     libraryTarget: 'umd',
   },
   mode: 'production',
