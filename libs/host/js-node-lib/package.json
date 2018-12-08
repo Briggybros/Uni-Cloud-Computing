@@ -1,8 +1,10 @@
 {
-  "name": "js-dom",
+  "name": "js-node-lib",
   "version": "1.0.0",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": "https://github.com/Briggybros/Uni-Cloud-Computing",
-  "author": "Gregory Sims, Ben Norris",
+  "author": "Gregory Sims",
   "license": "MIT",
   "private": true,
   "files": [
@@ -11,7 +13,6 @@
   ],
   "scripts": {
     "compile": "run-p compile:*",
-    "compile:umd": "webpack",
     "compile:esm": "babel -x '.ts' ./src/**/* -d lib -D",
     "compile:types": "tsc --emitDeclarationOnly -p ./tsconfig.json --outDir ./lib",
     "clean": "rimraf lib",
@@ -26,11 +27,10 @@
     "@types/socket.io-client": "^1.4.32",
     "babel-loader": "^8.0.4",
     "npm-run-all": "^4.1.5",
-    "rimraf": "^2.6.2",
-    "webpack": "^4.27.0",
-    "webpack-cli": "^3.1.2"
+    "rimraf": "^2.6.2"
   },
   "dependencies": {
-    "socket.io-client": "^2.2.0"
+    "socket.io-client": "^2.2.0",
+    "wrtc": "^0.3.2"
   }
 }

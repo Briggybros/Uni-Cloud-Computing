@@ -1,8 +1,11 @@
 {
   "name": "controller-lib",
   "version": "1.0.0",
+  "main": "dist/controller.min.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": "https://github.com/Briggybros/Uni-Cloud-Computing",
-  "author": "Gregory Sims, Ben Norris",
+  "author": "Gregory Sims",
   "license": "MIT",
   "private": true,
   "files": [

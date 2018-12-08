@@ -1,10 +1,17 @@
 {
   "name": "signalling",
   "version": "1.0.0",
+  "bin": {
+    "ucc-signalling": "./bin/server.js"
+  },
   "repository": "https://github.com/Briggybros/Uni-Cloud-Computing",
-  "author": "Gregory Sims, Ben Norris",
+  "author": "Gregory Sims",
   "license": "MIT",
   "private": true,
+  "files": [
+    "bin",
+    "src"
+  ],
   "scripts": {
     "start": "npm run compile && node bin/server.js",
     "compile": "babel src -d bin -x .ts -D",

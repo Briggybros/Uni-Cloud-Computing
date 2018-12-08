@@ -3,7 +3,8 @@
   "workspaces": [
     "services/*",
     "libs/host/*",
-    "libs/controller"
+    "libs/controller-lib",
+    "examples/*"
   ],
   "scripts": {
     "start": "lerna run start --stream",

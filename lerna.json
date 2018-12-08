@@ -1,5 +1,10 @@
 {
   "lerna": "3.5.1",
-  "packages": ["services/*", "libs/host/*", "libs/controller"],
+  "packages": [
+    "services/*",
+    "libs/host/*",
+    "libs/controller-lib",
+    "examples/*"
+  ],
   "version": "0.0.0"
 }
