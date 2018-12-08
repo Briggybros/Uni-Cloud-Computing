@@ -1,17 +1,26 @@
 {
   "private": true,
   "workspaces": [
-    "packages/*"
+    "services/*",
+    "libs/host/*",
+    "libs/controller-lib",
+    "examples/*"
   ],
   "scripts": {
+    "start": "lerna run start --stream",
     "compile": "lerna run compile",
     "clean": "lerna run clean",
     "lint": "lerna run lint",
     "test": "lerna run test",
-    "test-all": "npm run clean && npm run compile && npm run lint && npm run test",
-    "check-packages": "yarn clean && yarn compile && yarn test && yarn lint"
+    "test-all": "npm run clean && npm run compile && npm run lint && npm run test"
   },
   "devDependencies": {
-    "lerna": "^2.11.0"
+    "@types/node": "^10.12.11",
+    "lerna": "^3.5.1",
+    "prettier": "^1.15.3",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "tslint-config-prettier": "^1.17.0",
+    "typescript": "^3.2.1"
   }
 }

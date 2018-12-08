@@ -1,0 +1,33 @@
+{
+  "name": "@timberwolf/signalling",
+  "version": "1.0.0",
+  "bin": {
+    "ucc-signalling": "./bin/server.js"
+  },
+  "repository": "https://github.com/Briggybros/Uni-Cloud-Computing",
+  "author": "Gregory Sims",
+  "license": "MIT",
+  "private": true,
+  "files": [
+    "bin",
+    "src"
+  ],
+  "scripts": {
+    "start": "npm run compile && node bin/server.js",
+    "compile": "babel src -d bin -x .ts -D",
+    "clean": "rimraf bin",
+    "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",
+    "test": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-typescript": "^7.1.0",
+    "@types/socket.io": "^2.1.0",
+    "rimraf": "^2.6.2"
+  },
+  "dependencies": {
+    "socket.io": "^2.2.0"
+  }
+}
