@@ -97,8 +97,9 @@ io.on('connection', (socket: Socket) => {
     if (host === null) return sendError(socket, Error.NO_HOST);
     if (socket.id === host.id) return sendError(socket, Error.SELF_HOST);
 
-    if (mode === 'relay' && !!description)
+    if (mode === 'relay' && !!description) {
       return sendError(socket, Error.INCORRECT_MODE);
+    }
 
     LOGGING && console.log('Sending description to host');
 
