@@ -13,7 +13,7 @@
     "src"
   ],
   "scripts": {
-    "start": "npm run compile && node bin/server.js",
+    "start": "node bin/server.js",
     "compile": "babel src -d bin -x .ts -D",
     "clean": "rimraf bin",
     "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",

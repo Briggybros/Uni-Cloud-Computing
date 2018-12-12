@@ -24,6 +24,11 @@ const server = app.listen(PORT, () => {
 
 const io = socketIO(server);
 
+/* If no host connects in 5 mins, kill the server */
+setTimeout(() => {
+  if (host === null) process.exit(0);
+}, 5 * 60 * 1000);
+
 io.on('connection', (socket: Socket) => {
   LOGGING && console.log('New connection');
 
@@ -42,6 +47,7 @@ io.on('connection', (socket: Socket) => {
       LOGGING && console.log('Host disconnected');
       host = null;
       Object.values(io.sockets.connected).forEach(s => s.disconnect());
+      process.exit(0);
     });
 
     host.on('host-description', (controllerId, description) => {
