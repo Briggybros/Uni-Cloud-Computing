@@ -101,7 +101,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControllerHost.cs" />
+    <Compile Include="PeerControllerHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RelayControllerHost.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
