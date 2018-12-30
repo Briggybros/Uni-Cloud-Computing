@@ -5,10 +5,13 @@ import RelayController from './RelayController';
 
 export { CommsType, EventType } from './Controller';
 
-export default function getController(
-  commsType: CommsType,
-  url: string
-): Controller {
+export default async function getController(url: string): Promise<Controller> {
+  const response = await fetch(`${url}`);
+  const info = await response.json();
+
+  const commsType: CommsType =
+    info.mode === 'peer' ? CommsType.Peer : CommsType.Relay;
+
   switch (commsType) {
     case CommsType.Peer:
       return new PeerController(url);

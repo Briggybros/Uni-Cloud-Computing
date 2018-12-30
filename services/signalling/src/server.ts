@@ -1,5 +1,6 @@
 #!/bin/node
-import http from 'http';
+import express from 'express';
+import cors from 'cors';
 import socketIO, { Socket } from 'socket.io';
 
 import { Error, sendError } from './errors';
@@ -8,18 +9,23 @@ const PORT: string = process.env.PORT || '8081';
 const HOST_KEY: string = process.env.HOST_KEY || '';
 const LOGGING = process.env.LOGGING || false;
 
-const server = http.createServer();
-const io = socketIO(server);
-
 let host: Socket | null = null;
 let mode: 'peer' | 'relay';
 
+const app = express();
+
+app.use(cors());
+
+app.get('/', (req, res) => res.send({ mode, ready: !!host }));
+
+const server = app.listen(PORT, () => {
+  console.log(`Signalling server listening on: ${PORT}`);
+});
+
+const io = socketIO(server);
+
 io.on('connection', (socket: Socket) => {
   LOGGING && console.log('New connection');
-
-  if (host !== null) {
-    socket.emit('mode', mode);
-  }
 
   /** HOST MESSAGES */
   socket.on('register-host', (type: 'peer' | 'relay', hostKey: string) => {
@@ -112,8 +118,4 @@ io.on('connection', (socket: Socket) => {
     LOGGING && console.log('Sending controller input to host');
     host.emit('controller-input', socket.id, ...args);
   });
-});
-
-server.listen(PORT, () => {
-  console.log(`Signalling server listening on: ${PORT}`);
 });

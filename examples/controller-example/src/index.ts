@@ -7,9 +7,9 @@ const connectButton = document.getElementById('connect');
 const incrementButton = document.getElementById('increment');
 
 connectButton &&
-  connectButton.addEventListener('click', () => {
+  connectButton.addEventListener('click', async () => {
     console.log('Connect button clicked');
-    const controller = getController(CommsType.Relay, 'http://localhost:8081');
+    const controller = await getController('http://localhost:8081');
 
     controller.addEventListener(EventType.Message, console.log);
     controller.addEventListener(EventType.Error, console.error);

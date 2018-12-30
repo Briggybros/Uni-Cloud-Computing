@@ -7,7 +7,7 @@ console.log(`Game started with count=${count}`);
 
 setTimeout(() => {
   const controllerHost = getControllerHost(
-    CommsType.Relay,
+    CommsType.Peer,
     'http://localhost:8081',
     ''
   );
