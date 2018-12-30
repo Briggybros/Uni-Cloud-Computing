@@ -1,4 +1,7 @@
-import getController, { CommsType, EventType } from '@timberwolf/controller-lib';
+import getController, {
+  CommsType,
+  EventType,
+} from '@timberwolf/controller-lib';
 
 const connectButton = document.getElementById('connect');
 const incrementButton = document.getElementById('increment');
@@ -18,9 +21,10 @@ connectButton &&
       connectButton.removeAttribute('disabled');
       incrementButton && incrementButton.setAttribute('disabled', 'true');
     });
-    incrementButton && incrementButton.addEventListener('click', () => {
-      controller.send('increment');
-    });
+    incrementButton &&
+      incrementButton.addEventListener('click', () => {
+        controller.send('increment');
+      });
 
     controller.connect();
   });
