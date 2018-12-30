@@ -13,23 +13,27 @@ namespace TimberwolfNetHostLib
         public override void Connect()
         {
             Socket socket = IO.Socket(url);
+
             socket.On(Socket.EVENT_CONNECT_ERROR, (error) =>
             {
                 EmitEvent(EventType.Error, error);
             });
+
             socket.On(Socket.EVENT_CONNECT_TIMEOUT, (error) =>
             {
                 EmitEvent(EventType.Error, error);
             });
 
+            socket.On("signalling_error", new SignallingErrorListener(EmitEvent));
+
             socket.On(Socket.EVENT_CONNECT, () =>
             {
-                socket.Emit("register-host", hostKey, "relay");
+                socket.Emit("register-host", "relay", hostKey);
             });
 
             socket.On("controller-input", new ControllerInputListener(EmitEvent));
             socket.On("controller-description", new ControllerDescriptionListener(EmitEvent));
-            socket.On("signalling_error", new SignallingErrorListener(EmitEvent));
+            socket.On("controller-disconnected", new ControllerDisconnectedListener(EmitEvent));
         }
 
         private class ControllerInputListener : IListener
@@ -94,6 +98,31 @@ namespace TimberwolfNetHostLib
             public void Call(params object[] args)
             {
                 emitEvent(EventType.Error, args);
+            }
+
+            public int CompareTo(IListener other)
+            {
+                throw new NotImplementedException();
+            }
+
+            public int GetId()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private class ControllerDisconnectedListener : IListener
+        {
+            private Action<EventType, object[]> emitEvent;
+
+            public ControllerDisconnectedListener(Action<EventType, object[]> emitEvent)
+            {
+                this.emitEvent = emitEvent;
+            }
+
+            public void Call(params object[] args)
+            {
+                this.emitEvent(EventType.ControllerDisconnected, args);
             }
 
             public int CompareTo(IListener other)

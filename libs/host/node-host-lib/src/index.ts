@@ -1,6 +1,7 @@
 import { RTCPeerConnection } from 'wrtc';
-import { connect as rtcConnect } from '@timberwolf/js-host-lib';
+import getControllerHost from '@timberwolf/js-host-lib';
 
-export function connect(signalling: string) {
-  return rtcConnect(RTCPeerConnection)(signalling);
-}
+(global as any).RTCPeerConnection = RTCPeerConnection;
+
+export { CommsType } from '@timberwolf/js-host-lib';
+export default getControllerHost;

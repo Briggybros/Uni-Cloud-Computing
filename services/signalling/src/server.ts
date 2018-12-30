@@ -6,7 +6,7 @@ import { Error, sendError } from './errors';
 
 const PORT: string = process.env.PORT || '8081';
 const HOST_KEY: string = process.env.HOST_KEY || '';
-const LOGGING = true;
+const LOGGING = process.env.LOGGING || false;
 
 const server = http.createServer();
 const io = socketIO(server);
@@ -22,13 +22,14 @@ io.on('connection', (socket: Socket) => {
     }
 
     /** HOST MESSAGES */
-    socket.on('register-host', (hostKey: string, m: 'peer' | 'relay') => {
+    socket.on('register-host', (type: 'peer' | 'relay', hostKey: string) => {
         LOGGING && console.log(`Registering host: ${socket.id}`);
         if (hostKey !== HOST_KEY) return sendError(socket, Error.INVALID_HOST_KEY);
         if (host !== null) return sendError(socket, Error.EXISTING_HOST);
 
         host = socket;
-        mode = m;
+        LOGGING && console.log(`Setting mode to: ${type}`);
+        mode = type;
 
         LOGGING && console.log('Host registered');
         host.on('disconnect', () => {
@@ -54,9 +55,27 @@ io.on('connection', (socket: Socket) => {
             LOGGING && console.log(`Sending ice candidate to controller: ${controllerId}`);
             controller.emit('host-ice-candidate', icecandidate);
         });
+
+        host.on('broadcast', (...args: any[]) => {
+            if (mode !== 'relay') return sendError(socket, Error.INCORRECT_MODE);
+            host && host.broadcast.emit('message', ...args);
+        });
+
+        host.on('message', (controllerId: string, ...args: any[]) => {
+            if (mode !== 'relay') return sendError(socket, Error.INCORRECT_MODE);
+            const controller = io.sockets.connected[controllerId];
+            if (!controller) return sendError(socket, Error.NO_CONTROLLER);
+            controller.emit('message', ...args);
+        });
     });
 
     /** CONTROLLER MESSAGES */
+    socket.on('disconnect', () => {
+        if (mode === 'relay' && host && socket.id !== host.id) {
+            host.emit('controller-disconnected', socket.id);
+        }
+    });
+
     socket.on('controller-description', description => {
         LOGGING && console.log('Controller description received');
         LOGGING && console.log(`controllerId: ${socket.id}`);
@@ -82,15 +101,13 @@ io.on('connection', (socket: Socket) => {
         host.emit('controller-ice-candidate', socket.id, icecandidate);
     });
 
-    socket.on('controller-input', (name: string, value: string) => {
+    socket.on('controller-input', (...args: any[]) => {
         if (mode !== 'relay') return sendError(socket, Error.INCORRECT_MODE);
         LOGGING && console.log('Controller input received');
-        LOGGING && console.log(`input name: ${name}`);
-        LOGGING && console.log(`input value: ${value}`);
         if (host === null) return sendError(socket, Error.NO_HOST);
         if (socket.id === host.id) return sendError(socket, Error.SELF_HOST);
         LOGGING && console.log('Sending controller input to host');
-        host.emit('controller-input', socket.id, name, value);
+        host.emit('controller-input', socket.id, ...args);
     });
 });
 

@@ -5,7 +5,7 @@ namespace TimberwolfNetHostLib
 
     public abstract class ControllerHost
     {
-        public enum EventType { Error, Input, ControllerConnected };
+        public enum EventType { Error, Input, ControllerConnected, ControllerDisconnected };
         public enum CommsType { Peer, Relay };
         public readonly CommsType commsType;
         public delegate void EventCallback(params object[] parts);
@@ -24,15 +24,15 @@ namespace TimberwolfNetHostLib
 
         public abstract void Connect();
 
-        public void AddEventListener(string eventName, EventCallback callback)
+        public void AddEventListener(EventType eventType, EventCallback callback)
         {
-            if (callbacks.ContainsKey(eventName))
+            if (callbacks.ContainsKey(eventType.ToString()))
             {
                 List<EventCallback> newCallbacks = new List<EventCallback>(callbacks[eventName])
                 {
                     callback
                 };
-                callbacks[eventName] = newCallbacks;
+                callbacks[eventType.ToString()] = newCallbacks;
             }
             else
             {
@@ -40,7 +40,7 @@ namespace TimberwolfNetHostLib
                 {
                     callback
                 };
-                this.callbacks.Add(eventName, callbacks);
+                this.callbacks.Add(eventType.ToString(), callbacks);
             }
         }
 
