@@ -6,13 +6,15 @@ namespace TimberwolfNetHostLib
 {
     public class RelayControllerHost : ControllerHost
     {
+        private Socket socket;
+
         public RelayControllerHost(string url, string hostKey) : base(url, hostKey, CommsType.Relay)
         {
         }
 
         public override void Connect()
         {
-            Socket socket = IO.Socket(url);
+            socket = IO.Socket(url);
 
             socket.On(Socket.EVENT_CONNECT_ERROR, (error) =>
             {
@@ -34,6 +36,16 @@ namespace TimberwolfNetHostLib
             socket.On("controller-input", new ControllerInputListener(EmitEvent));
             socket.On("controller-description", new ControllerDescriptionListener(EmitEvent));
             socket.On("controller-disconnected", new ControllerDisconnectedListener(EmitEvent));
+        }
+
+        public override void Broadcast(params object[] args)
+        {
+            socket.Emit("broadcast", args);
+        }
+
+        public override void Message(string controllerId, params object[] args)
+        {
+            socket.Emit("broadcast", args);
         }
 
         private class ControllerInputListener : IListener
@@ -113,7 +125,7 @@ namespace TimberwolfNetHostLib
 
         private class ControllerDisconnectedListener : IListener
         {
-            private Action<EventType, object[]> emitEvent;
+            private readonly Action<EventType, object[]> emitEvent;
 
             public ControllerDisconnectedListener(Action<EventType, object[]> emitEvent)
             {
@@ -122,7 +134,7 @@ namespace TimberwolfNetHostLib
 
             public void Call(params object[] args)
             {
-                this.emitEvent(EventType.ControllerDisconnected, args);
+                emitEvent(EventType.ControllerDisconnected, args);
             }
 
             public int CompareTo(IListener other)

@@ -27,7 +27,6 @@ C:\Users\grego\Documents\Uni-Cloud-Computing\libs\host\net-host-lib\TimberwolfNe
 C:\Users\grego\Documents\Uni-Cloud-Computing\libs\host\net-host-lib\TimberwolfNetHostLibExample\bin\Debug\System.Collections.Immutable.dll
 C:\Users\grego\Documents\Uni-Cloud-Computing\libs\host\net-host-lib\TimberwolfNetHostLibExample\bin\Debug\WebSocket4Net.dll
 C:\Users\grego\Documents\Uni-Cloud-Computing\libs\host\net-host-lib\TimberwolfNetHostLibExample\bin\Debug\SuperSocket.ClientEngine.dll
-C:\Users\grego\Documents\Uni-Cloud-Computing\libs\host\net-host-lib\TimberwolfNetHostLibExample\bin\Debug\netstandard.dll
 C:\Users\grego\Documents\Uni-Cloud-Computing\libs\host\net-host-lib\TimberwolfNetHostLibExample\bin\Debug\TimberwolfNetHostLib.pdb
 C:\Users\grego\Documents\Uni-Cloud-Computing\libs\host\net-host-lib\TimberwolfNetHostLibExample\bin\Debug\TimberwolfNetHostLib.dll.config
 C:\Users\grego\Documents\Uni-Cloud-Computing\libs\host\net-host-lib\TimberwolfNetHostLibExample\bin\Debug\Newtonsoft.Json.pdb

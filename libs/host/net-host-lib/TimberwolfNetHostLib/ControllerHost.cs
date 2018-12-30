@@ -5,6 +5,16 @@ namespace TimberwolfNetHostLib
 
     public abstract class ControllerHost
     {
+        public static ControllerHost getControllerHost(CommsType commsType, string url, string hostKey)
+        {
+            switch (commsType)
+            {
+                case CommsType.Peer: return new PeerControllerHost(url, hostKey);
+                case CommsType.Relay: return new RelayControllerHost(url, hostKey);
+                default: return new RelayControllerHost(url, hostKey);
+            }
+        }
+
         public enum EventType { Error, Input, ControllerConnected, ControllerDisconnected };
         public enum CommsType { Peer, Relay };
         public readonly CommsType commsType;
@@ -23,12 +33,14 @@ namespace TimberwolfNetHostLib
         }
 
         public abstract void Connect();
+        public abstract void Broadcast(params object[] args);
+        public abstract void Message(string controllerId, params object[] args);
 
         public void AddEventListener(EventType eventType, EventCallback callback)
         {
             if (callbacks.ContainsKey(eventType.ToString()))
             {
-                List<EventCallback> newCallbacks = new List<EventCallback>(callbacks[eventName])
+                List<EventCallback> newCallbacks = new List<EventCallback>(callbacks[eventType.ToString()])
                 {
                     callback
                 };

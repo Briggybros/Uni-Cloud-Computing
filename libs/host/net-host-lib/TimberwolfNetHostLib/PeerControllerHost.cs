@@ -13,5 +13,15 @@ namespace TimberwolfNetHostLib
         {
             throw new NotImplementedException();
         }
+
+        public override void Broadcast(params object[] args)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Message(string controllerId, params object[] args)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
