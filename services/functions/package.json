@@ -1,0 +1,29 @@
+{
+  "name": "@timberwolf/functions",
+  "version": "1.0.0",
+  "repository": "https://github.com/Briggybros/Uni-Cloud-Computing",
+  "author": "Gregory Sims",
+  "license": "MIT",
+  "private": true,
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "compile": "babel src -d lib -x .ts -D",
+    "deploy": "node zip.js && run-p deploy:*",
+    "deploy:test": "aws lambda update-function-code --function-name lambda --zip-file fileb://dist/test.zip",
+    "clean": "rimraf lib dist",
+    "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",
+    "test": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-typescript": "^7.1.0",
+    "node-zip": "^1.1.1",
+    "rimraf": "^2.6.2"
+  },
+  "dependencies": {}
+}
