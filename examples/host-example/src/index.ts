@@ -1,10 +1,6 @@
 import getControllerHost, { CommsType } from '@timberwolf/node-host-lib';
 import { EventType } from '@timberwolf/js-host-lib/lib/ControllerHost';
 
-let count = 0;
-
-console.log(`Game started with count=${count}`);
-
 setTimeout(() => {
   const controllerHost = getControllerHost(
     CommsType.Peer,
@@ -27,8 +23,6 @@ setTimeout(() => {
     (controllerId: string, ...args: any[]) => {
       console.log(`data received from ${controllerId}`);
       console.log('args: ', args);
-      count = count + 1;
-      console.log(`Count updated! count=${count}`);
     }
   );
 

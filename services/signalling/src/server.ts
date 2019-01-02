@@ -5,7 +5,7 @@ import socketIO, { Socket } from 'socket.io';
 
 import { Error, sendError } from './errors';
 
-const PORT: string = process.env.PORT || '80';
+const PORT: string = process.env.PORT || '8081';
 const HOST_KEY: string = process.env.HOST_KEY || '';
 const LOGGING = process.env.LOGGING || false;
 

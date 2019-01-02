@@ -12,18 +12,22 @@
   "scripts": {
     "compile": "babel src -d lib -x .ts -D",
     "deploy": "node zip.js && run-p deploy:*",
-    "deploy:test": "aws lambda update-function-code --function-name lambda --zip-file fileb://dist/test.zip",
     "clean": "rimraf lib dist",
     "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",
-    "test": "tsc --noEmit"
+    "test": "tsc --noEmit",
+    "deploy:requestSignallingServer": "aws lambda update-function-code --function-name requestSignallingServer --zip-file fileb://dist/requestSignallingServer.zip"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
     "@babel/preset-typescript": "^7.1.0",
+    "@types/aws-lambda": "^8.10.17",
+    "@types/aws-sdk": "^2.7.0",
     "node-zip": "^1.1.1",
     "rimraf": "^2.6.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "aws-sdk": "^2.382.0"
+  }
 }
