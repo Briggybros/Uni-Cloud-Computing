@@ -11,6 +11,10 @@ const leftButton = document.getElementById('left');
 const rightButton = document.getElementById('right');
 const submitButton = document.getElementById('submit');
 const cancelButton = document.getElementById('cancel');
+var up = false;
+var down = false;
+var left = false;
+var right = false;
 
 connectButton &&
   connectButton.addEventListener('click', async () => {
@@ -34,44 +38,86 @@ connectButton &&
     upButton &&
       upButton.addEventListener('mousedown', () => {
         controller.send('up', 'true');
+		up = true;
       });
+	upButton &&
+	  upButton.addEventListener('mouseleave', () => {
+		if(up){
+			up = false;
+			controller.send('up', 'false');
+		}
+	  });
+	upButton &&
       upButton.addEventListener('mouseup', () => {
-        controller.send('up', 'false');
+		if(up){
+			up = false;
+			controller.send('up', 'false');
+		}
       });
     downButton &&
       downButton.addEventListener('mousedown', () => {
         controller.send('down', 'true');
+		down = true;
       });
-      downButton.addEventListener('mousedown', () => {
-        controller.send('down', 'false');
+	downButton &&
+	  downButton.addEventListener('mouseleave', () => {
+		if(down){
+			down = false;
+			controller.send('down', 'false');
+		}
+	  });
+	downButton &&
+      downButton.addEventListener('mouseup', () => {
+        if(down){
+			down = false;
+			controller.send('down', 'false');
+		}
       });
     leftButton &&
       leftButton.addEventListener('mousedown', () => {
         controller.send('left', 'true');
+		left = true;
       });
-      leftButton.addEventListener('mouseleft', () => {
-        controller.send('left', 'false');
+	leftButton &&
+	  leftButton.addEventListener('mouseleave', () => {
+		if(left){
+			left = false;
+			controller.send('left', 'false');
+		}
+	  });
+	leftButton &&
+      leftButton.addEventListener('mouseup', () => {
+        if(left){
+			left = false;
+			controller.send('left', 'false');
+		}
       });
     rightButton &&
       rightButton.addEventListener('mousedown', () => {
         controller.send('right', 'true');
+		right = true;
       });
-      rightButton.addEventListener('mouseright', () => {
-        controller.send('right', 'false');
+	rightButton &&
+	  rightButton.addEventListener('mouseleave', () => {
+		if(right){
+			right = false;
+			controller.send('right', 'false');
+		}
+	  });
+	rightButton &&
+      rightButton.addEventListener('mouseup', () => {
+        if(right){
+			right = false;
+			controller.send('right', 'false');
+		}
       });
     submitButton &&
-      submitButton.addEventListener('mousedown', () => {
+      submitButton.addEventListener('click', () => {
         controller.send('submit', 'true');
       });
-      submitButton.addEventListener('mousesubmit', () => {
-        controller.send('submit', 'false');
-      });
     cancelButton &&
-      cancelButton.addEventListener('mousedown', () => {
+      cancelButton.addEventListener('click', () => {
         controller.send('cancel', 'true');
-      });
-      cancelButton.addEventListener('mousecancel', () => {
-        controller.send('cancel', 'false');
       });
 
     controller.connect();
