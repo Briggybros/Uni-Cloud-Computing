@@ -15,7 +15,8 @@
     "clean": "rimraf lib dist",
     "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",
     "test": "tsc --noEmit",
-    "deploy:requestSignallingServer": "aws lambda update-function-code --function-name requestSignallingServer --zip-file fileb://dist/requestSignallingServer.zip"
+    "deploy:requestSignallingServer": "aws lambda update-function-code --function-name requestSignallingServer --zip-file fileb://dist/requestSignallingServer.zip",
+    "deploy:onSignallingStopped": "aws lambda update-function-code --function-name onSignallingStopped --zip-file fileb://dist/onSignallingStopped.zip"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
@@ -23,7 +24,6 @@
     "@babel/preset-env": "^7.1.6",
     "@babel/preset-typescript": "^7.1.0",
     "@types/aws-lambda": "^8.10.17",
-    "@types/aws-sdk": "^2.7.0",
     "node-zip": "^1.1.1",
     "rimraf": "^2.6.2"
   },

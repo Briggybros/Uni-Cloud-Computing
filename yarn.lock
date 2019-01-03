@@ -1280,13 +1280,6 @@
   resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.17.tgz#bbe458225bab095c3e313115182f31f072474940"
   integrity sha512-KV/9fMAvv5428/v4+AP4nDOfSB4sJIBOGgBtv5YbuQVaAEapL1/Bc8IyACZ48Q3hYukVFjzAdVFq94zTxyd5Yw==
 
-"@types/aws-sdk@^2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@types/aws-sdk/-/aws-sdk-2.7.0.tgz#83588b3d14ebdca1d4ce5e023387577568ce82f3"
-  integrity sha1-g1iLPRTr3KHUzl4CM4dXdWjOgvM=
-  dependencies:
-    aws-sdk "*"
-
 "@types/body-parser@*":
   version "1.17.0"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.17.0.tgz#9f5c9d9bd04bb54be32d5eb9fc0d8c974e6cf58c"
@@ -1819,7 +1812,7 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-aws-sdk@*, aws-sdk@^2.382.0:
+aws-sdk@^2.382.0:
   version "2.382.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.382.0.tgz#9212bc7aced9c051973578d06ea1978a57ccbd5f"
   integrity sha512-wGjZLYo2ZxGTlj2cHy/0zOfYJKUVBQYG1vpW4Cnbgo3HTtOu906a6tqkiD8QuN0EyEkn7i+wyjSiUFOCh3T/2g==
