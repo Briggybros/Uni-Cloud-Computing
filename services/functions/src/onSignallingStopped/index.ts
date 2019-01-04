@@ -4,7 +4,7 @@ import { Context } from 'aws-lambda';
 export function handler(event: any, context: Context) {
   if (event.detail.lastStatus === 'STOPPED') {
     const taskARN = event.detail.taskArn;
-    const ddb = new DynamoDB();
+    const ddb = new DynamoDB({ apiVersion: '2012-08-10' });
 
     ddb.scan(
       {
