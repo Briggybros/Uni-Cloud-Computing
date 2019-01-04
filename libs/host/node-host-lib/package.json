@@ -25,11 +25,13 @@
     "@babel/core": "^7.2.0",
     "@babel/preset-env": "^7.2.0",
     "@babel/preset-typescript": "^7.1.0",
+    "@types/websocket": "^0.0.40",
     "npm-run-all": "^4.1.5",
     "rimraf": "^2.6.2"
   },
   "dependencies": {
     "@timberwolf/js-host-lib": "1.0.0",
+    "websocket": "^1.0.28",
     "wrtc": "^0.3.2"
   }
 }

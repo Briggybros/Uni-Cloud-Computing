@@ -28,7 +28,10 @@ export async function handler(event: any) {
   await agma
     .postToConnection({
       ConnectionId: connectionId,
-      Data: 'Provisioning signalling server',
+      Data: JSON.stringify({
+        code: 102,
+        message: 'Processing',
+      }),
     })
     .promise();
 

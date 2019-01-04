@@ -163,9 +163,13 @@ export async function handler(event: any) {
     .postToConnection({
       ConnectionId: connectionId,
       Data: JSON.stringify({
-        code,
-        hostKey,
-        ip,
+        code: 201,
+        message: 'Created',
+        body: {
+          code,
+          hostKey,
+          ip,
+        },
       }),
     })
     .promise();

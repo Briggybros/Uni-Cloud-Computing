@@ -15,12 +15,19 @@ export type EventCallback = (...parts: any[]) => void;
 export default abstract class ControllerHost {
   public readonly commsType: CommsType;
 
+  public readonly roomCode: string;
   protected readonly url: string;
   protected readonly hostKey: string;
 
   private callbacks: { [eventType: string]: EventCallback[] } = {};
 
-  constructor(url: string, hostKey: string, commsType: CommsType) {
+  constructor(
+    roomCode: string,
+    url: string,
+    hostKey: string,
+    commsType: CommsType
+  ) {
+    this.roomCode = roomCode;
     this.url = url;
     this.hostKey = hostKey;
     this.commsType = commsType;

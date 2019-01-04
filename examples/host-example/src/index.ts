@@ -1,12 +1,8 @@
 import getControllerHost, { CommsType } from '@timberwolf/node-host-lib';
 import { EventType } from '@timberwolf/js-host-lib/lib/ControllerHost';
 
-setTimeout(() => {
-  const controllerHost = getControllerHost(
-    CommsType.Peer,
-    'http://localhost:8081',
-    ''
-  );
+setTimeout(async () => {
+  const controllerHost = await getControllerHost(CommsType.Peer);
 
   controllerHost.addEventListener(EventType.ControllerConnected, () => {
     console.log('Controller connected');

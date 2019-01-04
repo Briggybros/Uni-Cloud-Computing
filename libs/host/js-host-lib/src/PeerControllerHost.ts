@@ -10,8 +10,8 @@ interface Connections {
 export default class PeerControllerHost extends ControllerHost {
   private connections: Connections = {};
 
-  constructor(url: string, hostKey: string) {
-    super(url, hostKey, CommsType.Peer);
+  constructor(roomCode: string, url: string, hostKey: string) {
+    super(roomCode, url, hostKey, CommsType.Peer);
   }
 
   public connect(): void {
@@ -124,8 +124,9 @@ export default class PeerControllerHost extends ControllerHost {
 
   public message(controllerId: string, ...args: any[]): void {
     const controller = this.connections[controllerId];
-    if (!controller)
+    if (!controller) {
       return this.emitEvent(EventType.Error, `Invalid controller`);
+    }
     controller.dataChannel
       ? controller.dataChannel.send(JSON.stringify(args))
       : this.emitEvent(EventType.Error, `Bad data channel`);

@@ -5,8 +5,8 @@ import ControllerHost, { CommsType, EventType } from './ControllerHost';
 export default class RelayControllerHost extends ControllerHost {
   private socket?: SocketIOClient.Socket;
 
-  constructor(url: string, hostKey: string) {
-    super(url, hostKey, CommsType.Relay);
+  constructor(roomCode: string, url: string, hostKey: string) {
+    super(roomCode, url, hostKey, CommsType.Relay);
   }
 
   public connect(): void {
