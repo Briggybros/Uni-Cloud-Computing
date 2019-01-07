@@ -38,7 +38,7 @@ namespace TimberwolfNetHostLibExample
 
             host.Connect();
 
-            while (true) { } // Find better way to do this, need to keep the thread running to recieve comms
+            Console.ReadLine();
         }
     }
 }

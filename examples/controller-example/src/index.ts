@@ -1,37 +1,42 @@
 import getController, { EventType } from '@timberwolf/controller-lib';
 
-const upButton = document.getElementById('up');
-const downButton = document.getElementById('down');
-const leftButton = document.getElementById('left');
-const rightButton = document.getElementById('right');
-const submitButton = document.getElementById('submit');
-const cancelButton = document.getElementById('cancel');
+const ipInput = document.getElementById('ip') as HTMLInputElement;
+const conenctButton = document.getElementById('connect') as HTMLButtonElement;
+
+const upButton = document.getElementById('up') as HTMLButtonElement;
+const downButton = document.getElementById('down') as HTMLButtonElement;
+const leftButton = document.getElementById('left') as HTMLButtonElement;
+const rightButton = document.getElementById('right') as HTMLButtonElement;
+const submitButton = document.getElementById('submit') as HTMLButtonElement;
+const cancelButton = document.getElementById('cancel') as HTMLButtonElement;
 
 let up = false;
 let down = false;
 let left = false;
 let right = false;
 
-getController('http://localhost:8081').then(controller => {
-  controller.addEventListener(EventType.Message, console.log);
+conenctButton.addEventListener('click', async () => {
+  if (ipInput) {
+    const url = `http://${ipInput.value}`;
+    const controller = await getController(url);
 
-  controller.addEventListener(EventType.Error, console.error);
+    controller.addEventListener(EventType.Message, console.log);
 
-  controller.addEventListener(EventType.Connected, () =>
-    console.log('Controller connected')
-  );
+    controller.addEventListener(EventType.Error, console.error);
 
-  controller.addEventListener(EventType.Disconnected, () =>
-    console.log('Controller disconnected')
-  );
+    controller.addEventListener(EventType.Connected, () =>
+      console.log('Controller connected')
+    );
 
-  upButton &&
+    controller.addEventListener(EventType.Disconnected, () =>
+      console.log('Controller disconnected')
+    );
+
     upButton.addEventListener('mousedown', () => {
       controller.send('up', 'true');
       up = true;
     });
 
-  upButton &&
     upButton.addEventListener('mouseleave', () => {
       if (up) {
         up = false;
@@ -39,7 +44,6 @@ getController('http://localhost:8081').then(controller => {
       }
     });
 
-  upButton &&
     upButton.addEventListener('mouseup', () => {
       if (up) {
         up = false;
@@ -47,12 +51,10 @@ getController('http://localhost:8081').then(controller => {
       }
     });
 
-  downButton &&
     downButton.addEventListener('mousedown', () => {
       controller.send('down', 'true');
       down = true;
     });
-  downButton &&
     downButton.addEventListener('mouseleave', () => {
       if (down) {
         down = false;
@@ -60,7 +62,6 @@ getController('http://localhost:8081').then(controller => {
       }
     });
 
-  downButton &&
     downButton.addEventListener('mouseup', () => {
       if (down) {
         down = false;
@@ -68,13 +69,11 @@ getController('http://localhost:8081').then(controller => {
       }
     });
 
-  leftButton &&
     leftButton.addEventListener('mousedown', () => {
       controller.send('left', 'true');
       left = true;
     });
 
-  leftButton &&
     leftButton.addEventListener('mouseleave', () => {
       if (left) {
         left = false;
@@ -82,7 +81,6 @@ getController('http://localhost:8081').then(controller => {
       }
     });
 
-  leftButton &&
     leftButton.addEventListener('mouseup', () => {
       if (left) {
         left = false;
@@ -90,13 +88,11 @@ getController('http://localhost:8081').then(controller => {
       }
     });
 
-  rightButton &&
     rightButton.addEventListener('mousedown', () => {
       controller.send('right', 'true');
       right = true;
     });
 
-  rightButton &&
     rightButton.addEventListener('mouseleave', () => {
       if (right) {
         right = false;
@@ -104,7 +100,6 @@ getController('http://localhost:8081').then(controller => {
       }
     });
 
-  rightButton &&
     rightButton.addEventListener('mouseup', () => {
       if (right) {
         right = false;
@@ -112,15 +107,14 @@ getController('http://localhost:8081').then(controller => {
       }
     });
 
-  submitButton &&
     submitButton.addEventListener('click', () => {
       controller.send('submit', 'true');
     });
 
-  cancelButton &&
     cancelButton.addEventListener('click', () => {
       controller.send('cancel', 'true');
     });
 
-  controller.connect();
+    controller.connect();
+  }
 });

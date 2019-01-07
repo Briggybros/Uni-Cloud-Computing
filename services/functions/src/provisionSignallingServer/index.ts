@@ -3,10 +3,9 @@ import { ECS, EC2, DynamoDB, ApiGatewayManagementApi, AWSError } from 'aws-sdk';
 const CLUSTER = 'Timberwolf-Signalling';
 const TASK_DEFINITION = 'SignallingServer:4';
 
-function logErrorAndClose(error: any) {
-  console.error(error);
-  process.exit(1);
-}
+const ecs = new ECS({ apiVersion: '2014-11-13' });
+const ec2 = new EC2({ apiVersion: '2016-11-15' });
+const ddb = new DynamoDB({ apiVersion: '2012-08-10' });
 
 function generateChars(i: number = 1) {
   function generateChar() {
@@ -25,13 +24,25 @@ export async function handler(event: any) {
   const code = generateChars(4);
   const hostKey = generateChars(16);
 
-  const ecs = new ECS({ apiVersion: '2014-11-13' });
-  const ec2 = new EC2({ apiVersion: '2016-11-15' });
-  const ddb = new DynamoDB({ apiVersion: '2012-08-10' });
   const agma = new ApiGatewayManagementApi({
     endpoint,
     apiVersion: '2018-11-29',
   });
+
+  async function doError(error: any) {
+    console.error(error);
+    await agma
+      .postToConnection({
+        ConnectionId: connectionId,
+        Data: JSON.stringify({
+          code: 500,
+          message: 'Internal Server Error',
+          body: error,
+        }),
+      })
+      .promise();
+    process.exit(1);
+  }
 
   const runTaskResponse = await ecs
     .runTask({
@@ -47,18 +58,26 @@ export async function handler(event: any) {
           subnets: ['subnet-3475bc78', 'subnet-3475bc78', 'subnet-3475bc78'],
         },
       },
+      overrides: {
+        containerOverrides: [
+          {
+            name: 'SignallingServer',
+            environment: [{ name: 'HOST_KEY', value: hostKey }],
+          },
+        ],
+      },
     })
     .promise()
     .then(result => result.$response);
 
-  if (runTaskResponse.error) return logErrorAndClose(runTaskResponse.error);
+  if (runTaskResponse.error) return await doError(runTaskResponse.error);
 
   if (
     !runTaskResponse.data ||
     !runTaskResponse.data.tasks ||
     !runTaskResponse.data.tasks[0]
   ) {
-    return logErrorAndClose('No tasks running');
+    return await doError('No tasks running');
   }
 
   const taskARN = runTaskResponse.data.tasks[0].taskArn as string;
@@ -68,18 +87,18 @@ export async function handler(event: any) {
     .promise()
     .then(result => result.$response);
 
-  if (waitForResponse.error) return logErrorAndClose(waitForResponse.error);
+  if (waitForResponse.error) return await doError(waitForResponse.error);
 
   if (
     !waitForResponse.data ||
     !waitForResponse.data.tasks ||
     !waitForResponse.data.tasks[0]
   ) {
-    return logErrorAndClose('No tasks');
+    return await doError('No tasks');
   }
 
   if (!waitForResponse.data.tasks[0].attachments) {
-    return logErrorAndClose('No network interface');
+    return await doError('No network interface');
   }
 
   const netInterfaceAttachment = waitForResponse.data.tasks[0].attachments.filter(
@@ -87,7 +106,7 @@ export async function handler(event: any) {
   )[0];
 
   if (!netInterfaceAttachment || !netInterfaceAttachment.details) {
-    return logErrorAndClose('No network interface');
+    return await doError('No network interface');
   }
 
   const networkInterfaceId = netInterfaceAttachment.details
@@ -95,7 +114,7 @@ export async function handler(event: any) {
     .map(detail => detail.value)[0];
 
   if (!networkInterfaceId) {
-    return logErrorAndClose('No network interface id');
+    return await doError('No network interface id');
   }
 
   const describeNetworkInterfacesResponse = await ec2
@@ -106,7 +125,7 @@ export async function handler(event: any) {
     .then(result => result.$response);
 
   if (describeNetworkInterfacesResponse.error) {
-    return logErrorAndClose(describeNetworkInterfacesResponse.error);
+    return await doError(describeNetworkInterfacesResponse.error);
   }
 
   if (
@@ -114,7 +133,7 @@ export async function handler(event: any) {
     !describeNetworkInterfacesResponse.data.NetworkInterfaces ||
     !describeNetworkInterfacesResponse.data.NetworkInterfaces[0]
   ) {
-    return logErrorAndClose('No network interfaces');
+    return await doError('No network interfaces');
   }
 
   if (
@@ -123,14 +142,14 @@ export async function handler(event: any) {
     !describeNetworkInterfacesResponse.data.NetworkInterfaces[0]
       .PrivateIpAddresses[0]
   ) {
-    return logErrorAndClose('No assigned IP addresses');
+    return await doError('No assigned IP addresses');
   }
 
   if (
     !describeNetworkInterfacesResponse.data.NetworkInterfaces[0]
       .PrivateIpAddresses[0].Association
   ) {
-    return logErrorAndClose('No associated public IP address');
+    return await doError('No associated public IP address');
   }
 
   const ip =
@@ -156,7 +175,7 @@ export async function handler(event: any) {
     .then(result => result.$response);
 
   if (putItemResponse.error) {
-    return logErrorAndClose(putItemResponse.error);
+    return await doError(putItemResponse.error);
   }
 
   await agma

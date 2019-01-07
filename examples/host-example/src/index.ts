@@ -1,8 +1,19 @@
 import getControllerHost, { CommsType } from '@timberwolf/node-host-lib';
 import { EventType } from '@timberwolf/js-host-lib/lib/ControllerHost';
 
-setTimeout(async () => {
-  const controllerHost = await getControllerHost(CommsType.Peer);
+async function start() {
+  console.log('Attempting to start host');
+  let controllerHost;
+
+  try {
+    controllerHost = await getControllerHost(CommsType.Peer);
+  } catch (err) {
+    console.error(err);
+    return process.exit(1);
+  }
+
+  console.log('Host started');
+  console.log('code: ', controllerHost.roomCode);
 
   controllerHost.addEventListener(EventType.ControllerConnected, () => {
     console.log('Controller connected');
@@ -23,4 +34,5 @@ setTimeout(async () => {
   );
 
   controllerHost.connect();
-}, 10000);
+}
+start();

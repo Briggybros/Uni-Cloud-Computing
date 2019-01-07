@@ -28,8 +28,11 @@ export default async function getControllerHost(
 
     socket.addEventListener('message', event => {
       const response = JSON.parse(event.data);
-      if (response.code === 201) {
-        resolve(response.body);
+      if (response.code === 201 && !!response.body) {
+        return resolve(response.body);
+      }
+      if (response.code >= 500 && response.code < 600) {
+        return reject(response);
       }
     });
   });

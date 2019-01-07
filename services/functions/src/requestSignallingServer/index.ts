@@ -1,8 +1,8 @@
 import { Lambda, ApiGatewayManagementApi } from 'aws-sdk';
 
-export async function handler(event: any) {
-  const lambda = new Lambda({ apiVersion: '2015-03-31' });
+const lambda = new Lambda({ apiVersion: '2015-03-31' });
 
+export async function handler(event: any) {
   const endpoint = `${event.requestContext.domainName}/${
     event.requestContext.stage
   }`;
@@ -35,5 +35,5 @@ export async function handler(event: any) {
     })
     .promise();
 
-  return { statusCode: 200, body: 'Provisioning signalling server' };
+  return { statusCode: 102, message: 'Processing', body: {} };
 }
