@@ -1,7 +1,7 @@
 import getController, { EventType } from '@timberwolf/controller-lib';
 
 const gameCode = document.getElementById('code') as HTMLInputElement;
-const conenctButton = document.getElementById('connect') as HTMLButtonElement;
+const connectButton = document.getElementById('connect') as HTMLButtonElement;
 
 const upButton = document.getElementById('up') as HTMLButtonElement;
 const downButton = document.getElementById('down') as HTMLButtonElement;
@@ -15,7 +15,7 @@ let down = false;
 let left = false;
 let right = false;
 
-conenctButton.addEventListener('click', async () => {
+connectButton.addEventListener('click', async () => {
   const code = gameCode.value;
 
   const controller = await getController(code);
