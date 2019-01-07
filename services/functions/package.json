@@ -15,6 +15,7 @@
     "clean": "rimraf lib dist",
     "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",
     "test": "tsc --noEmit",
+    "deploy:getSignallingServer": "aws lambda update-function-code --function-name getSignallingServer --zip-file fileb://dist/getSignallingServer.zip",
     "deploy:onSignallingStopped": "aws lambda update-function-code --function-name onSignallingStopped --zip-file fileb://dist/onSignallingStopped.zip",
     "deploy:provisionSignallingServer": "aws lambda update-function-code --function-name provisionSignallingServer --zip-file fileb://dist/provisionSignallingServer.zip",
     "deploy:requestSignallingServer": "aws lambda update-function-code --function-name requestSignallingServer --zip-file fileb://dist/requestSignallingServer.zip"

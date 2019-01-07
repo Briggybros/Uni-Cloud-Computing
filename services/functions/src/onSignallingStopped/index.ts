@@ -1,39 +1,38 @@
 import { DynamoDB, AWSError } from 'aws-sdk';
 import { Context } from 'aws-lambda';
 
-export function handler(event: any, context: Context) {
+const ddb = new DynamoDB({ apiVersion: '2012-08-10' });
+
+export async function handler(event: any, context: Context) {
   if (event.detail.lastStatus === 'STOPPED') {
     const taskARN = event.detail.taskArn;
-    const ddb = new DynamoDB({ apiVersion: '2012-08-10' });
 
-    ddb.scan(
-      {
-        TableName: 'SignallingServers',
-        ExpressionAttributeValues: {
-          ':v1': {
-            S: taskARN,
-          },
-        },
-        FilterExpression: 'ARN = :v1',
-      },
-      (err: AWSError, data: DynamoDB.QueryOutput) => {
-        if (err) return context.fail(err);
-
-        ddb.deleteItem(
-          {
-            TableName: 'SignallingServers',
-            Key: {
-              Code: {
-                S: (data.Items as any[])[0].Code.S,
-              },
+    try {
+      const scanResponse = await ddb
+        .scan({
+          TableName: 'SignallingServers',
+          ExpressionAttributeValues: {
+            ':v1': {
+              S: taskARN,
             },
           },
-          (err: AWSError) => {
-            if (err) return context.fail(err);
-            return context.succeed(true);
-          }
-        );
-      }
-    );
+          FilterExpression: 'ARN = :v1',
+        })
+        .promise();
+      await ddb
+        .deleteItem({
+          TableName: 'SignallingServers',
+          Key: {
+            Code: {
+              S: (scanResponse.Items as any[])[0].Code.S,
+            },
+          },
+        })
+        .promise();
+
+      return context.succeed(true);
+    } catch (error) {
+      return context.fail(error);
+    }
   }
 }
