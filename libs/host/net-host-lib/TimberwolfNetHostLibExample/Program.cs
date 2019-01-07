@@ -5,13 +5,14 @@ namespace TimberwolfNetHostLibExample
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static async System.Threading.Tasks.Task runAsync()
         {
-            int count = 0;
+            Console.WriteLine("Running...");
 
-            Console.WriteLine("Game started with count=" + count);
+            ControllerHost host = await ControllerHost.getControllerHostAsync(ControllerHost.CommsType.Relay);
 
-            ControllerHost host = ControllerHost.getControllerHost(ControllerHost.CommsType.Relay, "http://localhost:8081", "");
+            Console.WriteLine("Host established");
+            Console.WriteLine("Room Code: " + host.roomCode);
 
             host.AddEventListener(ControllerHost.EventType.ControllerConnected, (object[] parts) =>
             {
@@ -30,15 +31,17 @@ namespace TimberwolfNetHostLibExample
 
             host.AddEventListener(ControllerHost.EventType.Input, (object[] parts) =>
             {
-                Console.WriteLine("data received from " + parts[0]);
-                Console.WriteLine("parts[1]: " + parts[1]);
-                count = count + 1;
-                Console.WriteLine("Count updated! count=" + count);
+                Console.WriteLine("data received");
+                Console.WriteLine(string.Join(", ", parts));
             });
 
             host.Connect();
+        }
 
-            Console.ReadLine();
+        private static void Main(string[] args)
+        {
+            runAsync();
+            while (true) { }
         }
     }
 }
