@@ -8,7 +8,11 @@ namespace TimberwolfNetHostLib
     {
         private Socket socket;
 
+<<<<<<< HEAD
         public RelayControllerHost(string roomCode, string url, string hostKey) : base(roomCode, url, hostKey, CommsType.Relay)
+=======
+        public RelayControllerHost(string url, string hostKey) : base(url, hostKey, CommsType.Relay)
+>>>>>>> master
         {
         }
 
