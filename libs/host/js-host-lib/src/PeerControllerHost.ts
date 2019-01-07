@@ -8,6 +8,7 @@ interface Connections {
   };
 }
 export default class PeerControllerHost extends ControllerHost {
+  private socket?: SocketIOClient.Socket;
   private connections: Connections = {};
 
   constructor(roomCode: string, url: string, hostKey: string) {
@@ -15,25 +16,27 @@ export default class PeerControllerHost extends ControllerHost {
   }
 
   public connect(): void {
-    const socket = io(this.url);
+    this.socket = io(this.url);
 
-    socket.on('connect_error', (error: any) =>
+    this.socket.on('connect_error', (error: any) =>
       this.emitEvent(EventType.Error, error)
     );
 
-    socket.on('connect_timeout', (error: any) =>
+    this.socket.on('connect_timeout', (error: any) =>
       this.emitEvent(EventType.Error, error)
     );
 
-    socket.on('signalling_error', (...args: any[]) =>
+    this.socket.on('signalling_error', (...args: any[]) =>
       this.emitEvent(EventType.Error, ...args)
     );
 
-    socket.on('connect', () =>
-      socket.emit('register-host', 'peer', this.hostKey)
+    this.socket.on(
+      'connect',
+      () =>
+        this.socket && this.socket.emit('register-host', 'peer', this.hostKey)
     );
 
-    socket.on(
+    this.socket.on(
       'controller-description',
       async (controllerId: string, description: RTCSessionDescription) => {
         if (!this.connections[controllerId]) {
@@ -68,7 +71,8 @@ export default class PeerControllerHost extends ControllerHost {
           });
 
           connection.addEventListener('icecandidate', ({ candidate }) => {
-            socket.emit('host-ice-candidate', controllerId, candidate);
+            this.socket &&
+              this.socket.emit('host-ice-candidate', controllerId, candidate);
           });
 
           connection.addEventListener('iceconnectionstatechange', () => {
@@ -85,11 +89,12 @@ export default class PeerControllerHost extends ControllerHost {
           await this.connections[controllerId].connection.setLocalDescription(
             await this.connections[controllerId].connection.createAnswer()
           );
-          socket.emit(
-            'host-description',
-            controllerId,
-            this.connections[controllerId].connection.localDescription
-          );
+          this.socket &&
+            this.socket.emit(
+              'host-description',
+              controllerId,
+              this.connections[controllerId].connection.localDescription
+            );
         } else if (description.type === 'answer') {
           await this.connections[controllerId].connection.setRemoteDescription(
             description
@@ -103,7 +108,7 @@ export default class PeerControllerHost extends ControllerHost {
       }
     );
 
-    socket.on(
+    this.socket.on(
       'controller-ice-candidate',
       (controllerId: string, candidate: RTCIceCandidate) => {
         const controller = this.connections[controllerId];
@@ -112,6 +117,11 @@ export default class PeerControllerHost extends ControllerHost {
         }
       }
     );
+  }
+
+  public disconenct(): void {
+    this.socket && this.socket.disconnect();
+    Object.values(this.connections).forEach(pair => pair.connection.close());
   }
 
   public broadcast(...args: any[]): void {

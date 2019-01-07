@@ -34,6 +34,7 @@ export default abstract class ControllerHost {
   }
 
   public abstract connect(): void;
+  public abstract disconnect(): void;
   public abstract broadcast(...args: any[]): void;
   public abstract message(controllerId: string, ...args: any[]): void;
 

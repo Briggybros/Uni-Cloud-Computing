@@ -43,6 +43,11 @@ export default class RelayControllerHost extends ControllerHost {
     );
   }
 
+  public disconnect(): void {
+    if (!this.socket) return this.emitEvent(EventType.Error, `Not connected`);
+    this.socket.disconnect();
+  }
+
   public broadcast(...args: any[]): void {
     if (!this.socket) return this.emitEvent(EventType.Error, `Not connected`);
     this.socket.emit('broadcast', ...args);
