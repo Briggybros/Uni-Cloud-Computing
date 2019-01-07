@@ -119,7 +119,7 @@ export default class PeerControllerHost extends ControllerHost {
     );
   }
 
-  public disconenct(): void {
+  public disconnect(): void {
     this.socket && this.socket.disconnect();
     Object.values(this.connections).forEach(pair => pair.connection.close());
   }
