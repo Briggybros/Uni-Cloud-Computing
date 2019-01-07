@@ -25,7 +25,10 @@ export async function handler(
     if (!getResponse.Item) {
       return callback(null, {
         statusCode: 404,
-        headers: {},
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+        },
         body: 'Not found',
         isBase64Encoded: false,
       });
@@ -33,7 +36,10 @@ export async function handler(
 
     return callback(null, {
       statusCode: 200,
-      headers: {},
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
       body: JSON.stringify({
         code: getResponse.Item.Code.S,
         ip: getResponse.Item.IP.S,
