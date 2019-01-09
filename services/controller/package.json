@@ -15,7 +15,7 @@
     "deploy": "aws s3 sync ./dist s3://timberwolf.briggybros.com",
     "clean": "rimraf dist",
     "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",
-    "test": "tsc --noEmit"
+    "test": "tsc --noEmit --skipLibCheck"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
