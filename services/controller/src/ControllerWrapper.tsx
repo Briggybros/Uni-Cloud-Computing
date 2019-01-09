@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import Controller, { CommsType } from './Controller';
+import Controller, { CommsType, EventType } from './Controller';
 import PeerController from './PeerController';
 import RelayController from './RelayController';
 import { RouteComponentProps } from 'react-router';
@@ -59,6 +59,10 @@ export default (props: RouteComponentProps<{ code: string }>) => {
   React.useEffect(
     () => {
       if (!!controller) {
+        controller.addEventListener(EventType.Disconnected, () => {
+          window.location.replace('/');
+        });
+
         fetch(`/controllers/${controller.controllerId}/controller.json`)
           .then(response => response.json())
           .then((data: ControllerData) =>
