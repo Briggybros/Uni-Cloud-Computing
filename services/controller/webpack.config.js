@@ -40,7 +40,16 @@ module.exports = {
     ]),
   ],
   output: {
+    publicPath: '/',
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
+  },
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 8080,
+    historyApiFallback: {
+      rewrites: [{ from: '/*', to: '/' }],
+    },
   },
 };

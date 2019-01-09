@@ -2,8 +2,7 @@
   "private": true,
   "workspaces": [
     "services/*",
-    "libs/host/*",
-    "libs/controller-lib",
+    "libs/*",
     "examples/*"
   ],
   "scripts": {
