@@ -6,10 +6,14 @@ controller => {
   const aButton = document.getElementById('a-button');
   const bButton = document.getElementById('b-button');
 
-  let up = false;
-  let down = false;
-  let left = false;
-  let right = false;
+  buttonStates = {
+    up: false,
+    down: false,
+    left: false,
+    right: false,
+    a: false,
+    b: false,
+  };
 
   controller.addEventListener('Message', console.log);
 
@@ -23,107 +27,34 @@ controller => {
     console.log('Controller disconnected')
   );
 
-  upButton.addEventListener('mousedown', () => {
-    controller.send('up', 'true');
-    up = true;
-  });
-  upButton.addEventListener('mouseleave', () => {
-    if (up) {
-      up = false;
-      controller.send('up', 'false');
+  function buttonDown(name) {
+    if (!buttonStates[name]) {
+      buttonStates[name] = true;
+      controller.send(name, 'true');
     }
-  });
-  upButton.addEventListener('mouseup', () => {
-    if (up) {
-      up = false;
-      controller.send('up', 'false');
-    }
-  });
+  }
 
-  downButton.addEventListener('mousedown', () => {
-    controller.send('down', 'true');
-    down = true;
-  });
-  downButton.addEventListener('mouseleave', () => {
-    if (down) {
-      down = false;
-      controller.send('down', 'false');
+  function buttonUp(name) {
+    if (buttonStates[name]) {
+      buttonStates[name] = false;
+      controller.send(name, 'false');
     }
-  });
-  downButton.addEventListener('mouseup', () => {
-    if (down) {
-      down = false;
-      controller.send('down', 'false');
-    }
-  });
+  }
 
-  leftButton.addEventListener('mousedown', () => {
-    controller.send('left', 'true');
-    left = true;
-  });
-  leftButton.addEventListener('mouseleave', () => {
-    if (left) {
-      left = false;
-      controller.send('left', 'false');
-    }
-  });
-  leftButton.addEventListener('mouseup', () => {
-    if (left) {
-      left = false;
-      controller.send('left', 'false');
-    }
-  });
+  function addListeners(element, name) {
+    element.addEventListener('mousedown', () => buttonDown(name));
+    element.addEventListener('mouseleave', () => buttonUp(name));
+    element.addEventListener('mouseup', () => buttonUp(name));
+    element.addEventListener('touchstart', e => buttonDown(name));
+    element.addEventListener('touchend', () => buttonUp(name));
+  }
 
-  rightButton.addEventListener('mousedown', () => {
-    controller.send('right', 'true');
-    right = true;
-  });
-  rightButton.addEventListener('mouseleave', () => {
-    if (right) {
-      right = false;
-      controller.send('right', 'false');
-    }
-  });
-  rightButton.addEventListener('mouseup', () => {
-    if (right) {
-      right = false;
-      controller.send('right', 'false');
-    }
-  });
-
-  aButton.addEventListener('mousedown', () => {
-    controller.send('a', 'true');
-    right = true;
-  });
-  aButton.addEventListener('mouseleave', () => {
-    if (right) {
-      right = false;
-      controller.send('a', 'false');
-    }
-  });
-  aButton.addEventListener('mouseup', () => {
-    if (right) {
-      right = false;
-      controller.send('a', 'false');
-    }
-  });
-
-  bButton.addEventListener('mousedown', () => {
-    controller.send('b', 'true');
-    right = true;
-  });
-  bButton.addEventListener('mouseleave', () => {
-    if (right) {
-      right = false;
-      controller.send('b', 'false');
-    }
-  });
-  bButton.addEventListener('mouseup', () => {
-    if (right) {
-      right = false;
-      controller.send('b', 'false');
-    }
-  });
+  addListeners(upButton, 'up');
+  addListeners(downButton, 'down');
+  addListeners(leftButton, 'left');
+  addListeners(rightButton, 'right');
+  addListeners(aButton, 'a');
+  addListeners(bButton, 'b');
 
   controller.connect();
 };
