@@ -15,6 +15,8 @@ controller => {
     b: false,
   };
 
+  const vibrator = window.navigator.vibrate;
+
   controller.addEventListener('Message', console.log);
 
   controller.addEventListener('Error', console.error);
@@ -31,6 +33,9 @@ controller => {
     if (!buttonStates[name]) {
       buttonStates[name] = true;
       controller.send(name, 'true');
+      if (!!vibrator) {
+        vibrate([50]);
+      }
     }
   }
 
