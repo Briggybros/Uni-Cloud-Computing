@@ -18,6 +18,7 @@
 }
 .button-label {
   pointer-events: none;
+  user-select: none;
 }
 svg {
   height: 100%;
