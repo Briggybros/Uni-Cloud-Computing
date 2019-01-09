@@ -6,7 +6,7 @@ controller => {
   const aButton = document.getElementById('a-button');
   const bButton = document.getElementById('b-button');
 
-  buttonStates = {
+  let buttonStates = {
     up: false,
     down: false,
     left: false,
