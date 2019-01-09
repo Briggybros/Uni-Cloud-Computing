@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using SuperSocket.ClientEngine;
 using System;
 using System.Collections.Generic;
@@ -63,9 +62,9 @@ namespace TimberwolfNetHostLib
                     promise.TrySetException(new Exception("Internal Server Error"));
                 }
             }
-            
+
             socket.Open();
-            
+
             SignallingServerResponse signallingServerResponse = await promise.Task;
 
             string url = "http://" + signallingServerResponse.ip;
@@ -74,22 +73,6 @@ namespace TimberwolfNetHostLib
                 case CommsType.Peer: return new PeerControllerHost(signallingServerResponse.code, url, signallingServerResponse.hostKey);
                 case CommsType.Relay: return new RelayControllerHost(signallingServerResponse.code, url, signallingServerResponse.hostKey);
                 default: return new RelayControllerHost(signallingServerResponse.code, url, signallingServerResponse.hostKey);
-=======
-﻿using System.Collections.Generic;
-
-namespace TimberwolfNetHostLib
-{
-
-    public abstract class ControllerHost
-    {
-        public static ControllerHost getControllerHost(CommsType commsType, string url, string hostKey)
-        {
-            switch (commsType)
-            {
-                case CommsType.Peer: return new PeerControllerHost(url, hostKey);
-                case CommsType.Relay: return new RelayControllerHost(url, hostKey);
-                default: return new RelayControllerHost(url, hostKey);
->>>>>>> master
             }
         }
 
@@ -98,24 +81,16 @@ namespace TimberwolfNetHostLib
         public readonly CommsType commsType;
         public delegate void EventCallback(params object[] parts);
 
-<<<<<<< HEAD
         public readonly string roomCode;
 
-=======
->>>>>>> master
         protected readonly string url;
         protected readonly string hostKey;
 
         private Dictionary<string, List<EventCallback>> callbacks = new Dictionary<string, List<EventCallback>>();
 
-<<<<<<< HEAD
         public ControllerHost(string roomCode, string url, string hostKey, CommsType commsType)
         {
             this.roomCode = roomCode;
-=======
-        public ControllerHost(string url, string hostKey, CommsType commsType)
-        {
->>>>>>> master
             this.url = url;
             this.hostKey = hostKey;
             this.commsType = commsType;
