@@ -1,0 +1,35 @@
+{
+  "name": "@timberwolf/functions",
+  "version": "1.0.0",
+  "repository": "https://github.com/Briggybros/Uni-Cloud-Computing",
+  "author": "Gregory Sims",
+  "license": "MIT",
+  "private": true,
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "compile": "babel src -d lib -x .ts -D",
+    "deploy": "node zip.js && run-p deploy:*",
+    "clean": "rimraf lib dist",
+    "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",
+    "test": "tsc --noEmit",
+    "deploy:getSignallingServer": "aws lambda update-function-code --function-name getSignallingServer --zip-file fileb://dist/getSignallingServer.zip",
+    "deploy:onSignallingStopped": "aws lambda update-function-code --function-name onSignallingStopped --zip-file fileb://dist/onSignallingStopped.zip",
+    "deploy:provisionSignallingServer": "aws lambda update-function-code --function-name provisionSignallingServer --zip-file fileb://dist/provisionSignallingServer.zip",
+    "deploy:requestSignallingServer": "aws lambda update-function-code --function-name requestSignallingServer --zip-file fileb://dist/requestSignallingServer.zip"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-typescript": "^7.1.0",
+    "@types/aws-lambda": "^8.10.17",
+    "node-zip": "^1.1.1",
+    "rimraf": "^2.6.2"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.382.0"
+  }
+}

@@ -9,6 +9,7 @@
   "scripts": {
     "start": "lerna run start --stream",
     "compile": "lerna run compile",
+    "deploy": "npm run test-all && lerna run deploy",
     "clean": "lerna run clean",
     "lint": "lerna run lint",
     "test": "lerna run test",

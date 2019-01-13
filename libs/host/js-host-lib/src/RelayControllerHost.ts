@@ -5,8 +5,8 @@ import ControllerHost, { CommsType, EventType } from './ControllerHost';
 export default class RelayControllerHost extends ControllerHost {
   private socket?: SocketIOClient.Socket;
 
-  constructor(url: string, hostKey: string) {
-    super(url, hostKey, CommsType.Relay);
+  constructor(roomCode: string, url: string, hostKey: string) {
+    super(roomCode, url, hostKey, CommsType.Relay);
   }
 
   public connect(): void {
@@ -41,6 +41,11 @@ export default class RelayControllerHost extends ControllerHost {
     this.socket.on('controller-disconnected', (controllerId: string) =>
       this.emitEvent(EventType.ControllerDisconnected, controllerId)
     );
+  }
+
+  public disconnect(): void {
+    if (!this.socket) return this.emitEvent(EventType.Error, `Not connected`);
+    this.socket.disconnect();
   }
 
   public broadcast(...args: any[]): void {

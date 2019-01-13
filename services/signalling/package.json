@@ -2,7 +2,7 @@
   "name": "@timberwolf/signalling",
   "version": "1.0.0",
   "bin": {
-    "ucc-signalling": "./bin/server.js"
+    "timberwolf-signalling": "./bin/server.js"
   },
   "repository": "https://github.com/Briggybros/Uni-Cloud-Computing",
   "author": "Gregory Sims",
@@ -15,6 +15,7 @@
   "scripts": {
     "start": "node bin/server.js",
     "compile": "babel src -d bin -x .ts -D",
+    "deploy": "docker build -t 573399366614.dkr.ecr.us-east-2.amazonaws.com/timberwolf-signalling:latest . && docker push 573399366614.dkr.ecr.us-east-2.amazonaws.com/timberwolf-signalling:latest",
     "clean": "rimraf bin",
     "lint": "prettier --write 'src/**/*.ts' && tslint --test ./src",
     "test": "tsc --noEmit"

@@ -15,8 +15,8 @@ COPY . /usr/src/signalling
 
 RUN yarn compile
 
-# Expose the port 8080
-EXPOSE 8081
+# Expose the port 80
+EXPOSE 80
 
 # Set the startup command
 CMD ["yarn", "start"]

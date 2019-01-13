@@ -1,16 +1,19 @@
 import getControllerHost, { CommsType } from '@timberwolf/node-host-lib';
 import { EventType } from '@timberwolf/js-host-lib/lib/ControllerHost';
 
-let count = 0;
+async function start() {
+  console.log('Attempting to start host');
+  let controllerHost;
 
-console.log(`Game started with count=${count}`);
+  try {
+    controllerHost = await getControllerHost(CommsType.Peer);
+  } catch (err) {
+    console.error(err);
+    return process.exit(1);
+  }
 
-setTimeout(() => {
-  const controllerHost = getControllerHost(
-    CommsType.Peer,
-    'http://localhost:8081',
-    ''
-  );
+  console.log('Host started');
+  console.log('code: ', controllerHost.roomCode);
 
   controllerHost.addEventListener(EventType.ControllerConnected, () => {
     console.log('Controller connected');
@@ -27,10 +30,9 @@ setTimeout(() => {
     (controllerId: string, ...args: any[]) => {
       console.log(`data received from ${controllerId}`);
       console.log('args: ', args);
-      count = count + 1;
-      console.log(`Count updated! count=${count}`);
     }
   );
 
   controllerHost.connect();
-}, 10000);
+}
+start();
