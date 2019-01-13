@@ -97,6 +97,7 @@ namespace TimberwolfNetHostLib
         }
 
         public abstract void Connect();
+        public abstract void Disconnect();
         public abstract void Broadcast(params object[] args);
         public abstract void Message(string controllerId, params object[] args);
 

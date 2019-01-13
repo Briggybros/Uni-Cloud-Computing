@@ -38,6 +38,11 @@ namespace TimberwolfNetHostLib
             socket.On("controller-disconnected", new ControllerDisconnectedListener(EmitEvent));
         }
 
+        public override void Disconnect()
+        {
+            socket.Disconnect();
+        }
+
         public override void Broadcast(params object[] args)
         {
             socket.Emit("broadcast", args);

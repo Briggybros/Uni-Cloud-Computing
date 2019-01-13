@@ -14,6 +14,11 @@ namespace TimberwolfNetHostLib
             throw new NotImplementedException();
         }
 
+        public override void Disconnect()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Broadcast(params object[] args)
         {
             throw new NotImplementedException();
